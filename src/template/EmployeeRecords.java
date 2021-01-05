@@ -65,7 +65,7 @@ public class EmployeeRecords {
    * @param id the id of the employee you want to get the time for
    * @return int the time in seconds after midnight employee id first swiped in
    */
-  public int getTimeInFor(int id) {
+  public long getTimeInFor(int id) {
   		return 0;
   }
   

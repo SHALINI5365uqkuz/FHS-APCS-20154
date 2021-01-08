@@ -5,9 +5,15 @@ import java.util.ArrayList;
 public class EmployeeRecords {
 	private ArrayList<Employee> employees;
 	
-	public EmployeeRecords() {
+	/***
+	 * constructs a new records object representing a single day of card swipes.  it is pre-populated
+	 * with a number of consecutive employee ids gien by numids.
+	 * 
+	 * @param numids the number of consecutive employee ids to pre-populate the object with
+	 */
+	public EmployeeRecords(int numids) {
 		employees = new ArrayList<Employee>();
-		createEmployees();
+		createEmployees(numids);
 	}
 	
 	/***
@@ -15,9 +21,11 @@ public class EmployeeRecords {
 	 * These are the ids that will be in the actual swipes in the data file.
 	 * 
 	 * You may modify this method and/or the employee constructor if you wish.
+	 * 
+	 * @param numids the number of consecutive ids to populate your employee list with
 	 */
-	private void createEmployees() {
-		for (int id = 0; id < 300; id++) {
+	private void createEmployees(int numids) {
+		for (int id = 0; id < numids; id++) {
 			employees.add( new Employee(id) );
 		}
 	}
@@ -124,5 +132,19 @@ public class EmployeeRecords {
    */
   public int[] timeIntervalWithMostEmployees() {
   	return null;
+  }
+  
+  public void displayAllEmployees() {
+  	for (Employee e:this.employees) {
+  		System.out.println(e);
+  	}
+  }
+  
+  public static double toHours(double seconds) {
+  	return seconds/60.0/60.0;
+  }
+  
+  public static double toSeconds(double hours) {
+  	return hours*60.0*60.0;
   }
 }

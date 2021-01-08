@@ -17,13 +17,15 @@ public class Simulator {
 	private static final int TIME = 1;
 
 	public static void main(String[] args) {
-		EmployeeRecords records = new EmployeeRecords();
+		EmployeeRecords records = new EmployeeRecords(300);
 
 		long[][] swipeData = loadDataFromFile("swipeData.csv");
 		
 		for (int i = 0; i < swipeData.length; i++) {
 			records.registerSwipe((int)swipeData[i][ID], swipeData[i][TIME]);
 		}
+		
+		records.displayAllEmployees();
 	}
 
 	private static long[][] loadDataFromFile(String filepath) {

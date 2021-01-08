@@ -56,5 +56,9 @@ public class Employee {
 		if (timesIn.size() > 0) return timesIn.get(0);
 		return -1;
 	}
-
+	
+	public String toString() {
+		return id + " first in: " + EmployeeRecords.toHours(getFirstSwipeTime()) + " total time: " + 
+				EmployeeRecords.toHours(getTimeInBuilding());
+	}
 }

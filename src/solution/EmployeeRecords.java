@@ -1,6 +1,9 @@
 package solution;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class EmployeeRecords {
 	private ArrayList<Employee> employees;
@@ -147,4 +150,42 @@ public class EmployeeRecords {
   public static double toSeconds(double hours) {
   	return hours*60.0*60.0;
   }
+  
+  /***
+   * Load swipe data from a file.
+   * 
+   * pre-condition: File first line is the # of records, second line is column names
+   *   and remaining lines are comma-separated values.  First column is employee id, second is
+   *   time (in seconds since midnight).  We assume data is in increasing time-sequential order.
+   *   
+   * @param filepath
+   */
+	public void loadDataFromFile(String filepath) {
+		Scanner scanner;
+		try {
+			scanner = new Scanner(new FileReader(filepath));
+			scanner.useDelimiter("\n");
+
+			String line;
+			int numRecords = scanner.nextInt(); 	// first line gives the number of records
+			scanner.next();												// skip the next line
+			
+			while (scanner.hasNext()) {
+				line = scanner.next();
+				String[] args = line.split(",");
+
+				try {
+					int id = Integer.parseInt(args[0].trim());
+					long time = Long.parseLong(args[1].trim());
+					
+					this.registerSwipe(id, time);
+					
+				} catch (Exception e) {
+					System.out.println("something went wrong:" + e.getMessage());
+				}
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found " + filepath);
+		}
+	}
 }

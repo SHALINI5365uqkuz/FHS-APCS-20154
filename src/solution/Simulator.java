@@ -28,41 +28,4 @@ public class Simulator {
 		records.displayAllEmployees();
 	}
 
-	private static long[][] loadDataFromFile(String filepath) {
-		Scanner scanner;
-		try {
-			scanner = new Scanner(new FileReader(filepath));
-			scanner.useDelimiter("\n");
-
-			String line;
-			int numRecords = scanner.nextInt(); 	// first line gives the number of records
-			long[][] records = new long[numRecords][2];
-			
-			scanner.next();												// skip the next line
-			
-			int i = 0;
-			while (scanner.hasNext()) {
-				line = scanner.next();
-				String[] args = line.split(",");
-
-				try {
-					int id = Integer.parseInt(args[ID].trim());
-					long time = Long.parseLong(args[TIME].trim());
-					
-					records[i][ID] = id;
-					records[i][TIME] = time;
-					i++;
-				} catch (Exception e) {
-					System.out.println("something went wrong:" + e.getMessage());
-				}
-			}
-			
-			return records;
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found " + filepath);
-		}
-		
-		return null;
-	}
-
 }

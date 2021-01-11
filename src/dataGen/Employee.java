@@ -50,10 +50,8 @@ public class Employee {
 
 	public static Employee getRandomEmployee() {
 		int time_in = WORK_DAY_START + (int) (Math.random() * toSecs(3));
-		int break_length = MIN_BREAK
-				+ (int) (Math.random() * (MAX_BREAK - MIN_BREAK + 1));
-		int time_out = time_in + break_length
-				+ (int) (Math.random() * (MAX_WORK_AMOUNT - MIN_WORK_AMOUNT));
+		int break_length = MIN_BREAK + (int) (Math.random() * (MAX_BREAK - MIN_BREAK + 1) );
+		int time_out = time_in + break_length	+ MIN_WORK_AMOUNT + (int) (Math.random() * (MAX_WORK_AMOUNT - MIN_WORK_AMOUNT));
 		time_out = Math.min(time_out, WORK_DAY_END);
 
 		Employee e = new Employee(time_in, time_out, break_length);

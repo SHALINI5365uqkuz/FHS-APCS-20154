@@ -168,7 +168,7 @@ public class EmployeeRecords {
 
 			String line;
 			int numRecords = scanner.nextInt(); 	// first line gives the number of records
-			scanner.next();												// skip the next line
+			scanner.next();
 			
 			while (scanner.hasNext()) {
 				line = scanner.next();

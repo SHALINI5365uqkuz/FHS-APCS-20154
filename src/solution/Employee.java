@@ -16,34 +16,35 @@ public class Employee {
 		timesOut = new ArrayList<Long>();
 		inBuilding = false;
 	}
-	
+
 	public void registerSwipe(long time) {
 		if (inBuilding) {
-			long last_swipe = timesIn.get( timesIn.size() - 1 );	   // get last
-			totalTime += (time - last_swipe);												 // update total time
+			long last_swipe = timesIn.get(timesIn.size() - 1); // get last
+			totalTime += (time - last_swipe); // update total time
 			timesOut.add(time);
 			inBuilding = false;
 		} else {
-			timesIn.add( time );
+			timesIn.add(time);
 			inBuilding = true;
 		}
 	}
-	
+
 	public boolean wasInBuildingAt(long time) {
 		for (int i = 0; i < timesIn.size(); i++) {
 			long timeIn = timesIn.get(i);
 			long timeOut = timesOut.get(i);
-			
-			if (time >= timeIn && time <= timeOut) return true;
+
+			if (time >= timeIn && time <= timeOut)
+				return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean isInBuilding() {
 		return inBuilding;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -53,12 +54,21 @@ public class Employee {
 	}
 
 	public long getFirstSwipeTime() {
-		if (timesIn.size() > 0) return timesIn.get(0);
+		if (timesIn.size() > 0)
+			return timesIn.get(0);
 		return -1;
 	}
-	
+
 	public String toString() {
-		return id + " first in: " + EmployeeRecords.toHours(getFirstSwipeTime()) + " total time: " + 
-				EmployeeRecords.toHours(getTimeInBuilding());
+		String ret = id + " first in: "
+				+ getFirstSwipeTime() + " total time: "
+				+ getTimeInBuilding() + "\n\t";
+
+		for (int i = 0; i < timesIn.size(); i++) {
+			ret += "[" + timesIn.get(i) + " - "
+					+ timesOut.get(i) + "], ";
+		}
+		
+		return ret;
 	}
 }

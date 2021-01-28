@@ -2,6 +2,7 @@ package robotics;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -52,7 +53,7 @@ public class EmployeeRecords {
 	 * @param id the id of the card that was swiped
 	 * @param swipe_time the time (in seconds since midnight) when the swipe occured
 	 */
-	public void registerSwipe(int id, long swipe_time) {
+	public void registerSwipe(int id, LocalDateTime swipe_time) {
 		Employee employee = getEmployeeById(id);			// get the employee for this swipe
 		
 		employee.registerSwipe(swipe_time);
@@ -65,15 +66,6 @@ public class EmployeeRecords {
 	 */
   public int getTimeInBuildingFor(int id) {
   	return  getEmployeeById(id).getTimeInBuilding();
-  }
-	
-  /***
-   * return the time employee id first swiped in
-   * @param id the id of the employee you want to get the time for
-   * @return int the time in seconds after midnight employee id first swiped in
-   */
-  public long getTimeInFor(int id) {
-  		return  getEmployeeById(id).getFirstSwipeTime();
   }
   
   /***
@@ -117,7 +109,7 @@ public class EmployeeRecords {
    * @param time the time (seconds after midnight) you want an employee list for
    * @return the list of employees in the building at that time
    */
-  public ArrayList<Employee> getEmployeesInBuildingAt(int time) {
+  public ArrayList<Employee> getEmployeesInBuildingAt(LocalDateTime time) {
   	ArrayList<Employee> inBuilding = new ArrayList<Employee>();
   	
   	for (Employee e:employees) {
@@ -152,6 +144,50 @@ public class EmployeeRecords {
   }
   
   /***
+   * Load swipe data from a file.
+   * 
+   * pre-condition: File first line is the # of records, second line is column names
+   *   and remaining lines are comma-separated values.  First column is employee id, second is
+   *   time (in seconds since midnight).  We assume data is in increasing time-sequential order.
+   *   
+   * @param filepath
+   */
+	public void loadEmployeeDataFromFile(String filepath) {
+		Scanner scanner;
+		try {
+			scanner = new Scanner(new FileReader(filepath));
+			scanner.useDelimiter("\n");
+
+			String line;
+			int numRecords = scanner.nextInt(); 	// first line gives the number of records
+			scanner.next();
+			
+			while (scanner.hasNext()) {
+				line = scanner.next();
+				String[] args = line.split(" ");
+
+				try {
+					int id = Integer.parseInt(args[0].trim());
+					String fn = args[1].trim();
+					String ln = args[2].trim();
+					String subteam = args[3].trim();
+					int freshmanYear = Integer.parseInt(args[4].trim());
+					
+					this.addEmployee( new Employee(id, fn, ln, subteam, freshmanYear) );
+				} catch (Exception e) {
+					System.out.println("something went wrong:" + e.getMessage());
+				}
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found " + filepath);
+		}
+	}
+  
+  public void addEmployee(Employee employee) {
+		this.employees.add(employee);
+	}
+
+	/***
    * Load swipe data from a file.
    * 
    * pre-condition: File first line is the # of records, second line is column names

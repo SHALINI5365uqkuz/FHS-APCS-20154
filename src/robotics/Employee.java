@@ -1,25 +1,44 @@
 package robotics;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Employee {
+	public static enum Subteam {ELECTRICAL, MECHANICAL, SOFTWARE, FINANCE, SAFETY, SPECIAL_PROJECTS};
+
+	private Subteam subteam;
+	private String firstname, lastname;
 	private int id; // unique employee id
 	private int totalTime;
-	private ArrayList<Long> timesIn, timesOut;
+	private ArrayList<LocalDateTime> timesIn, timesOut;
 	private boolean inBuilding;
 
-	public Employee(int id) {
-		this.id = id;
+//	public Employee(int id) {
+//		this.id = id;
+//
+//		totalTime = 0;
+//		timesIn = new ArrayList<LocalDateTime>();
+//		timesOut = new ArrayList<LocalDateTime>();
+//		inBuilding = false;
+//	}
 
+	public Employee(int id, String fn, String ln, String subteam,
+			int freshmanYear) {
+		this.id = id;
+		this.firstname = fn;
+		this.lastname = ln;
+		
+		// TODO: subteam things
+		
 		totalTime = 0;
-		timesIn = new ArrayList<Long>();
-		timesOut = new ArrayList<Long>();
+		timesIn = new ArrayList<LocalDateTime>();
+		timesOut = new ArrayList<LocalDateTime>();
 		inBuilding = false;
 	}
 
-	public void registerSwipe(long time) {
+	public void registerSwipe(LocalDateTime time) {
 		if (inBuilding) {
-			long last_swipe = timesIn.get(timesIn.size() - 1); // get last
+			LocalDateTime last_swipe = timesIn.get(timesIn.size() - 1); // get last
 			totalTime += (time - last_swipe); // update total time
 			timesOut.add(time);
 			inBuilding = false;
@@ -29,10 +48,10 @@ public class Employee {
 		}
 	}
 
-	public boolean wasInBuildingAt(long time) {
+	public boolean wasInBuildingAt(LocalDateTime time) {
 		for (int i = 0; i < timesIn.size(); i++) {
-			long timeIn = timesIn.get(i);
-			long timeOut = timesOut.get(i);
+			LocalDateTime timeIn = timesIn.get(i);
+			LocalDateTime timeOut = timesOut.get(i);
 
 			if (time >= timeIn && time <= timeOut)
 				return true;
@@ -53,15 +72,8 @@ public class Employee {
 		return totalTime;
 	}
 
-	public long getFirstSwipeTime() {
-		if (timesIn.size() > 0)
-			return timesIn.get(0);
-		return -1;
-	}
-
 	public String toString() {
-		String ret = id + " first in: "
-				+ getFirstSwipeTime() + " total time: "
+		String ret = id + " total time: "
 				+ getTimeInBuilding() + "\n\t";
 
 		for (int i = 0; i < timesIn.size(); i++) {

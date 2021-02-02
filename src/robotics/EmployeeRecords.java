@@ -1,7 +1,10 @@
 package robotics;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -145,12 +148,61 @@ public class EmployeeRecords {
 		return hours * 60.0 * 60.0;
 	}
 
+	public void writeEmployeeDataToFile(String filePath) {
+		BufferedWriter writer = null;
+		try {
+			// create a temporary file
+			File logFile = new File(filePath);
+			writer = new BufferedWriter(new FileWriter(logFile));
+
+			writer.write("id fn ln subteam firstyear \n");
+
+			// loop over all records
+			for (Employee employee : this.employees) {
+				writer.write(employee + "\n");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+
+	public void writeAttendanceDataToFile(String filePath) {
+		BufferedWriter writer = null;
+		try {
+			// create a temporary file
+			File logFile = new File(filePath);
+			writer = new BufferedWriter(new FileWriter(logFile));
+
+			writer.write("Format:  Each entry starts with an id followed by a series of datetimes for \n");
+			writer.write("swiping in and out. A blank line starts a new record. \n\n");
+
+			// loop over all records
+			for (Employee employee : this.employees) {
+				writer.write(employee.getId() + " " + employee.getFirstName() + " " + employee.getLastName() + "\n");
+				for (LocalDateTime swipe : employee.getSwipes()) {
+					writer.write(swipe.toString() + "\n");
+				}
+				writer.write("\n");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				writer.close();
+			} catch (Exception e) {
+			}
+		}
+	}
+
 	/***
-	 * Load swipe data from a file.
-	 * 
-	 * pre-condition: File first line is column names and remaining lines are
-	 * whitespace separated values. All whitespace is collapsed to a single space,
-	 * so whitespace formatting doesn't matter.
+	 * Load employee data from a file.
 	 * 
 	 * @param filepath
 	 */
@@ -203,13 +255,15 @@ public class EmployeeRecords {
 		try {
 			scanner = new Scanner(new FileReader(filepath));
 			scanner.useDelimiter("\n");
-			
+
 			String line;
+
+			if (!scanner.hasNext()) return;
 			
-			do {															// skip to first record
-				line = scanner.next().trim();
-			} while (!line.equals(""));
-			
+			do { // skip to first record
+				line = scanner.next();
+			} while (scanner.hasNext() && !line.equals(""));
+
 			while (scanner.hasNext()) {
 				line = scanner.next().trim();
 				String[] args = line.replaceAll("\\s+", " ").split(" ");

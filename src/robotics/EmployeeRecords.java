@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class EmployeeRecords {
@@ -33,9 +34,9 @@ public class EmployeeRecords {
 	 * @return Employee the employee corresponding to the input id, or null if no
 	 *         such employee
 	 */
-	public Employee getEmployeeById(int id) {
+	public Employee getEmployeeById(String id) {
 		for (Employee e : employees) {
-			if (e.getId() == id)
+			if (e.getId().trim().equals(id.trim()))
 				return e;
 		}
 
@@ -50,10 +51,13 @@ public class EmployeeRecords {
 	 * @param swipe_time
 	 *          the time (in seconds since midnight) when the swipe occured
 	 */
-	public void registerSwipe(int id, LocalDateTime swipe_time) {
+	public void registerSwipe(String id, LocalDateTime swipe_time) {
 		Employee employee = getEmployeeById(id); // get the employee for this swipe
 
-		employee.registerSwipe(swipe_time);
+		if (employee != null)
+			employee.registerSwipe(swipe_time);
+		else
+			System.out.println("Error: No record for id: " + id);
 	}
 
 	/***
@@ -64,7 +68,7 @@ public class EmployeeRecords {
 	 * @return int the total seconds spent inside the building so far for employee
 	 *         id
 	 */
-	public int getTimeInBuildingFor(int id) {
+	public int getTimeInBuildingFor(String id) {
 		return getEmployeeById(id).getTimeInBuilding();
 	}
 
@@ -179,12 +183,15 @@ public class EmployeeRecords {
 			File logFile = new File(filePath);
 			writer = new BufferedWriter(new FileWriter(logFile));
 
-			writer.write("Format:  Each entry starts with an id followed by a series of datetimes for \n");
-			writer.write("swiping in and out. A blank line starts a new record. \n\n");
+			writer
+					.write("Format:  Each entry starts with an id followed by a series of datetimes for \n");
+			writer
+					.write("swiping in and out. A blank line starts a new record. \n\n");
 
 			// loop over all records
 			for (Employee employee : this.employees) {
-				writer.write(employee.getId() + " " + employee.getFirstName() + " " + employee.getLastName() + "\n");
+				writer.write(employee.getId() + " " + employee.getFirstName() + " "
+						+ employee.getLastName() + "\n");
 				for (LocalDateTime swipe : employee.getSwipes()) {
 					writer.write(swipe.toString() + "\n");
 				}
@@ -220,7 +227,7 @@ public class EmployeeRecords {
 				String[] args = line.replaceAll("\\s+", " ").split(" ");
 
 				try {
-					int id = Integer.parseInt(args[0].trim());
+					String id = args[0].trim();
 					String fn = args[1].trim();
 					String ln = args[2].trim();
 					Employee.Subteam subteam = Employee.getSubteamFor(args[3].trim());
@@ -258,8 +265,9 @@ public class EmployeeRecords {
 
 			String line;
 
-			if (!scanner.hasNext()) return;
-			
+			if (!scanner.hasNext())
+				return;
+
 			do { // skip to first record
 				line = scanner.next();
 			} while (scanner.hasNext() && !line.equals(""));
@@ -269,7 +277,7 @@ public class EmployeeRecords {
 				String[] args = line.replaceAll("\\s+", " ").split(" ");
 
 				// Get employee id
-				int id = Integer.parseInt(args[0]);
+				String id = args[0].trim();
 				Employee e = getEmployeeById(id);
 				if (e == null) {
 					System.out.println("Invalid ID: " + id);
@@ -288,5 +296,61 @@ public class EmployeeRecords {
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found " + filepath);
 		}
+	}
+
+	public void logOutAllStudents() {
+		for (Employee e : this.employees) {
+			if (e.isInBuilding())
+				this.registerSwipe(e.getId(), LocalDateTime.now());
+		}
+	}
+
+	public String getAllStudentsString() {
+		String a = "";
+
+		for (Employee e : this.employees) {
+			a += e.toString() + "\n";
+		}
+
+		return a;
+	}
+
+	public String getStudentsString(String rest) {
+		String a = "";
+
+		for (Employee e : this.employees) {
+			if (e.getSubteam().toLowerCase().equals(rest.toLowerCase().trim()))
+				a += e.toString() + "\n";
+		}
+
+		return a;
+	}
+
+	public boolean isId(String first) {
+		Employee e = this.getEmployeeById(first);
+		return (e != null);
+	}
+
+	public boolean isName(String first) {
+		first = first.toLowerCase();
+		for (Employee e : employees) {
+			if (e.getFirstName().toLowerCase().equals(first)
+					|| e.getLastName().toLowerCase().equals(first))
+				return true;
+		}
+		
+		return false;
+	}
+
+	public List<Employee> getEmployeesByName(String first) {
+		List<Employee> list = new ArrayList<Employee>();
+		 
+		for (Employee e : employees) {
+			if (e.getFirstName().toLowerCase().equals(first)
+					|| e.getLastName().toLowerCase().equals(first))
+				list.add(e);
+		}
+		
+		return list;
 	}
 }

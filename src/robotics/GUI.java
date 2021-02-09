@@ -9,6 +9,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -28,7 +30,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 		initComponents();
 
 		records = new EmployeeRecords();
-		
+
 		records.loadEmployeeDataFromFile(path + studentData);
 		records.loadAttendanceDataFromFile(path + attendanceData);
 
@@ -38,6 +40,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 
 	public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 		System.out.println("Window closing!");
+		records.logOutAllStudents();
 		records.writeAttendanceDataToFile(path + attendanceData);
 	}
 
@@ -69,7 +72,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 		});
 
 		jPanel1.setBorder(javax.swing.BorderFactory
-				.createTitledBorder("Text Adventure"));
+				.createTitledBorder("Firebots Attendance Tracker"));
 
 		jScrollPane1.setEnabled(false);
 
@@ -193,7 +196,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 	private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {
 		if (evt.getKeyChar() == '\n') {
 			String command = jTextField1.getText();
-			output.append("\n> " + jTextField1.getText() + "\n");
+			output.append("\n> " + jTextField1.getText());
 			jTextField1.setText("");
 
 			handleCommand(command);
@@ -201,25 +204,69 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 	}
 
 	private void handleCommand(String command) {
+		roomDisplay.append("\n");
 		String[] words = command.split(" ");
 
 		if (words.length == 0)
 			return;
-		if (words.length == 1) {
-			int id = Integer.parseInt(words[0]);
+
+		String first = words[0];
+		String second = (words.length >= 2) ? words[1] : null;
+		String rest = (words.length >= 2) ? command.substring(
+				command.indexOf(" ") + 1).trim() : "";
+		String third = (words.length >= 3) ? words[2] : null;
+
+		// ***** Register Swipe *****
+		if (records.isId(first)) {
+			String id = first;
 			records.registerSwipe(id, LocalDateTime.now());
 			Employee e = records.getEmployeeById(id);
-			output.append("Registered swipe for " + e.getFirstName() + " at "
-					+ LocalDateTime.now());
-		} else {
-			String first = words[0];
-			String seconds = words[1];
-			
-			if (first.equals("who")) {
-				for (Employee e : records.getEmployeesInBuildingAt(LocalDateTime.now())) {
-					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName());
+			if (e != null)
+				roomDisplay
+						.append("Registered swipe for " + e.getFirstName()
+								+ ". Student is " + ((e.isInBuilding()) ? "signed IN"
+								: "signed OUT"));
+
+			// ***** Lookup by Name ****
+		} else if (records.isName(first)) {
+			List<Employee> list = records.getEmployeesByName(first);
+			for (Employee e : list)
+				roomDisplay.append(e.displayInfo() + "\n");
+
+			// **** List Students ****
+		} else if (first.equals("list")) {
+			roomDisplay.append((second == null) ? records.getAllStudentsString()
+					: records.getStudentsString(rest) + "\n");
+
+			// **** List who is present ****
+		} else if (first.equals("who")) {
+			List<Employee> lst = records
+					.getEmployeesInBuildingAt(LocalDateTime.now());
+
+			if (second == null) {
+				roomDisplay.append("Students preset at " + LocalDateTime.now() + ": "
+						+ lst.size() + "\n");
+
+				for (Employee e : lst) {
+					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName()
+							+ "\n");
+				}
+			} else {
+				List<Employee> lst2 = new ArrayList<Employee>();
+				for (Employee e : lst) {
+					if (e.getSubteam().toLowerCase().equals(second.toLowerCase()))
+						lst2.add(e);
+				}
+
+				roomDisplay.append("members of " + second.toUpperCase() + " preset at "
+						+ LocalDateTime.now() + ": " + lst2.size() + "\n");
+
+				for (Employee e : lst2) {
+					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName()
+							+ "\n");
 				}
 			}
+			this.roomDisplay.append("***\n");
 		}
 	}
 

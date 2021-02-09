@@ -13,7 +13,7 @@ public class Employee {
 
 	private Subteam subteam;
 	private String firstname, lastname;
-	private int id; // unique employee id
+	private String id; // unique employee id
 	private int firstYear;
 	private int totalTime;
 	private ArrayList<LocalDateTime> timesIn, timesOut;
@@ -28,7 +28,7 @@ public class Employee {
 	// inBuilding = false;
 	// }
 
-	public Employee(int id, String fn, String ln, Subteam subteam, int firstyear) {
+	public Employee(String id, String fn, String ln, Subteam subteam, int firstyear) {
 		this.id = id;
 		this.firstname = fn;
 		this.lastname = ln;
@@ -57,8 +57,10 @@ public class Employee {
 	public boolean wasInBuildingAt(LocalDateTime time) {
 		for (int i = 0; i < timesIn.size(); i++) {
 			LocalDateTime timeIn = timesIn.get(i);
+			
+			if (timesOut.size() - 1 < i) return time.isAfter(timeIn);
+			
 			LocalDateTime timeOut = timesOut.get(i);
-
 			if (time.isAfter(timeIn) && time.isBefore(timeOut))
 				return true;
 		}
@@ -70,7 +72,7 @@ public class Employee {
 		return inBuilding;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -99,7 +101,13 @@ public class Employee {
 
 	public String toString() {
 		return this.id + " " + this.firstname + " " + this.lastname + " "
-				+ this.subteam.toString() + " " + firstYear;
+				+ this.subteam.toString() + " ";
+	}
+	
+	public String displayInfo() {
+		String s = this.firstname + " " + this.lastname + " "
+				+ this.subteam.toString() + " " + ((this.isInBuilding())?"currently PRESENT":"NOT present");
+		return s;
 	}
 
 	public String getFirstName() {
@@ -108,6 +116,10 @@ public class Employee {
 	
 	public String getLastName() {
 		return this.lastname;
+	}
+	
+	public String getSubteam() {
+		return this.subteam.toString();
 	}
 
 	public ArrayList<LocalDateTime> getSwipes() {

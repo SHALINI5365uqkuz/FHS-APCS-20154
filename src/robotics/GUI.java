@@ -10,6 +10,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -18,8 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author David
  */
-public class GUI extends javax.swing.JFrame implements KeyListener,
-		WindowListener {
+public class GUI extends javax.swing.JFrame implements KeyListener, WindowListener {
 	private static final String path = "";
 	private static final String studentData = "StudentData.csv";
 	private static final String attendanceData = "AttendanceData.csv";
@@ -28,6 +28,8 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 
 	public GUI() {
 		initComponents();
+		
+		JOptionPane.showMessageDialog(null, "Type help for commands");
 
 		records = new EmployeeRecords();
 
@@ -71,8 +73,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 			}
 		});
 
-		jPanel1.setBorder(javax.swing.BorderFactory
-				.createTitledBorder("Firebots Attendance Tracker"));
+		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Firebots Attendance Tracker - Type 'help' to see commands"));
 
 		jScrollPane1.setEnabled(false);
 
@@ -103,82 +104,46 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
 		jPanel1Layout
-				.setHorizontalGroup(jPanel1Layout
-						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								jPanel1Layout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												jPanel1Layout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addGroup(
-																jPanel1Layout
-																		.createSequentialGroup()
-																		.addComponent(jLabel1)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																		.addComponent(jTextField1))
-														.addGroup(
-																jPanel1Layout
-																		.createSequentialGroup()
-																		.addComponent(jScrollPane1,
-																				javax.swing.GroupLayout.PREFERRED_SIZE,
-																				477,
-																				javax.swing.GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-																		.addComponent(jScrollPane2,
-																				javax.swing.GroupLayout.DEFAULT_SIZE,
-																				332, Short.MAX_VALUE)))
-										.addContainerGap()));
-		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(
-						jPanel1Layout
-								.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(
-										jPanel1Layout
-												.createParallelGroup(
-														javax.swing.GroupLayout.Alignment.LEADING, false)
-												.addComponent(jScrollPane2,
-														javax.swing.GroupLayout.DEFAULT_SIZE, 319,
-														Short.MAX_VALUE).addComponent(jScrollPane1))
-								.addPreferredGap(
-										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-								.addGroup(
-										jPanel1Layout
-												.createParallelGroup(
-														javax.swing.GroupLayout.Alignment.BASELINE)
-												.addComponent(jTextField1,
-														javax.swing.GroupLayout.PREFERRED_SIZE,
-														javax.swing.GroupLayout.DEFAULT_SIZE,
-														javax.swing.GroupLayout.PREFERRED_SIZE)
-												.addComponent(jLabel1))
-								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
-										Short.MAX_VALUE)));
+				.setHorizontalGroup(
+						jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(jPanel1Layout.createSequentialGroup().addContainerGap()
+										.addGroup(jPanel1Layout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel1)
+														.addPreferredGap(
+																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+												.addComponent(jTextField1))
+						.addGroup(jPanel1Layout.createSequentialGroup()
+								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(
+										jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)))
+						.addContainerGap()));
+		jPanel1Layout
+				.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(jPanel1Layout.createSequentialGroup().addContainerGap()
+								.addGroup(jPanel1Layout
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+										.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319,
+												Short.MAX_VALUE)
+										.addComponent(jScrollPane1))
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(jLabel1))
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				layout
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
-				layout
-						.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
-								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jPanel1,
+						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jPanel1,
+						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+				.addContainerGap()));
 
 		pack();
 	}// </editor-fold>
@@ -212,44 +177,84 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 
 		String first = words[0];
 		String second = (words.length >= 2) ? words[1] : null;
-		String rest = (words.length >= 2) ? command.substring(
-				command.indexOf(" ") + 1).trim() : "";
+		String rest = (words.length >= 2) ? command.substring(command.indexOf(" ") + 1).trim() : "";
 		String third = (words.length >= 3) ? words[2] : null;
 
+		if (first.equals("help")) {
+			displayHelpMessage();
+		} else
 		// ***** Register Swipe *****
 		if (records.isId(first)) {
 			String id = first;
 			records.registerSwipe(id, LocalDateTime.now());
 			Employee e = records.getEmployeeById(id);
-			if (e != null)
-				roomDisplay
-						.append("Registered swipe for " + e.getFirstName()
-								+ ". Student is " + ((e.isInBuilding()) ? "signed IN"
-								: "signed OUT"));
+			if (e != null) {
+				roomDisplay.append("Registered swipe for " + e.getFirstName() + ". Student is "
+						+ ((e.isInBuilding()) ? "signed IN" : "signed OUT"));
+
+				records.writeAttendanceDataToFile(path + attendanceData);
+			}
 
 			// ***** Lookup by Name ****
 		} else if (records.isName(first)) {
 			List<Employee> list = records.getEmployeesByName(first);
-			for (Employee e : list)
+			for (Employee e : list) {
 				roomDisplay.append(e.displayInfo() + "\n");
+				roomDisplay.append(e.getReportFor() + "\n");
+			}
 
 			// **** List Students ****
+		} else if (first.equals("missing")) {
+			if (second == null) return;
+			
+			List<Employee> list = records.getCurrentlyAbsentEmployeesFor(second);
+			for (Employee e : list)
+				roomDisplay.append(e.displayInfo() + "\n");
+			
+			roomDisplay.append("Total: " + list.size());
+			
+		} else if (first.equals("logout")) {
+			Employee e = records.getEmployeeById(second);
+			if (e != null) {
+				if (third != null) {
+					try {
+						double amt = Double.parseDouble(third);
+						int hours = (int)amt;
+						int minutes = (int)(amt-hours*60);
+						LocalDateTime t = LocalDateTime.now().minusHours(hours).minusMinutes(minutes);
+						e.logout(t);
+
+						records.writeAttendanceDataToFile(path + attendanceData);
+					} catch (Exception exc) {
+						System.out.println("Problem logging student out");
+					}
+				}
+			}
+
+		} else if (first.equals("report")) {
+			 ArrayList<Employee> list = records.getAllEmployees();
+			 Collections.sort(list);
+			 Collections.reverse(list);
+			 
+			 for (Employee e:list) {
+				 roomDisplay.append(e.getFirstName() + " " + e.getLastName() + "\n");
+				 roomDisplay.append(e.getReportFor());
+			 }
+			 
+			 records.writeAttendanceReportToFile("..\\attendanceReport.csv");
 		} else if (first.equals("list")) {
-			roomDisplay.append((second == null) ? records.getAllStudentsString()
-					: records.getStudentsString(rest) + "\n");
+			roomDisplay
+					.append((second == null) ? records.getAllStudentsString() : records.getStudentsString(rest) + "\n");
 
 			// **** List who is present ****
 		} else if (first.equals("who")) {
-			List<Employee> lst = records
-					.getEmployeesInBuildingAt(LocalDateTime.now());
+			List<Employee> lst = records.getEmployeesInBuildingAt(LocalDateTime.now());
 
 			if (second == null) {
-				roomDisplay.append("Students preset at " + LocalDateTime.now() + ": "
-						+ lst.size() + "\n");
+				roomDisplay.append("Students preset at " + LocalDateTime.now() + ": " + lst.size() + "\n");
 
 				for (Employee e : lst) {
-					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName()
-							+ "\n");
+					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName() + "\n");
 				}
 			} else {
 				List<Employee> lst2 = new ArrayList<Employee>();
@@ -258,21 +263,35 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 						lst2.add(e);
 				}
 
-				roomDisplay.append("members of " + second.toUpperCase() + " preset at "
-						+ LocalDateTime.now() + ": " + lst2.size() + "\n");
+				roomDisplay.append("members of " + second.toUpperCase() + " preset at " + LocalDateTime.now() + ": "
+						+ lst2.size() + "\n");
 
 				for (Employee e : lst2) {
-					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName()
-							+ "\n");
+					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName() + "\n");
 				}
 			}
 			this.roomDisplay.append("***\n");
 		}
 	}
 
+	private void displayHelpMessage() {
+		roomDisplay.append("Commands:\n");
+		roomDisplay.append("help\t\t- Get this list\n\n");
+
+		roomDisplay.append("who\t\t- List who is present\n");
+		roomDisplay.append("who [subteam]\t\t- List who is present in a subteam.\n\n");
+
+		roomDisplay.append("[id #]\t\t- Scans person in or out\n");
+		roomDisplay.append("[first name]\t\t- List whether person is present\n");
+		roomDisplay.append("[last name]\t\t- List whether person is present\n");
+		roomDisplay.append("list\t\t- List all people (regardless of whether present)\n");
+		roomDisplay.append("list [subteam name]\t\t- List all people in subteam.\n");
+
+	}
+
 	/**
 	 * @param args
-	 *          the command line arguments
+	 *            the command line arguments
 	 */
 	public static void main(String args[]) {
 		/* Set the Nimbus look and feel */
@@ -281,28 +300,24 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 		/*
 		 * If Nimbus (introduced in Java SE 6) is not available, stay with the
 		 * default look and feel. For details see
-		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
+		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.
+		 * html
 		 */
 		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
-					.getInstalledLookAndFeels()) {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
-					java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		// </editor-fold>
 

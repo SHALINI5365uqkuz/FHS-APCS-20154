@@ -6,9 +6,9 @@ import java.time.temporal.Temporal;
 import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 
-public class Employee {
+public class Employee implements Comparable<Employee> {
 	public static enum Subteam {
-		ELECTRICAL, MECHANICAL, SOFTWARE, FINANCE, SAFETY, SPECIAL_PROJECTS, MENTOR, UNKNOWN
+		ELECTRICAL, MECHANICAL, SOFTWARE, FINANCE, SAFETY, SPECIAL_PROJECTS, MENTOR, UNKNOWN, MPR
 	};
 
 	private Subteam subteam;
@@ -16,7 +16,7 @@ public class Employee {
 	private String id; // unique employee id
 	private int firstYear;
 	private int totalTime;
-	private ArrayList<LocalDateTime> timesIn, timesOut;
+	private ArrayList<LocalDateTime> timesIn, timesOut, forgotToSignOutDates;
 	private boolean inBuilding;
 
 	// public Employee(int id) {
@@ -38,6 +38,7 @@ public class Employee {
 		totalTime = 0;
 		timesIn = new ArrayList<LocalDateTime>();
 		timesOut = new ArrayList<LocalDateTime>();
+		forgotToSignOutDates = new ArrayList<LocalDateTime>();
 		inBuilding = false;
 	}
 
@@ -105,9 +106,23 @@ public class Employee {
 	}
 	
 	public String displayInfo() {
-		String s = this.firstname + " " + this.lastname + " "
+		String s = this.firstname + " " + this.lastname + " id: " + this.id + " " 
 				+ this.subteam.toString() + " " + ((this.isInBuilding())?"currently PRESENT":"NOT present");
 		return s;
+	}
+	
+	public String getReportFor() {
+		String s = "Total hours (including days they forgot to sign out): " + getTotalTime(true);
+		s += "\nTotal hours (discounting days they forgot to sign out): " + getTotalTime(false);
+		s += "\n# times forgot to sign out: " + this.forgotToSignOutDates.size();
+		s += "\n\n";
+		return s;
+	}
+	
+	public int compareTo(Employee other) {
+		if (this.getTotalTime(false) > other.getTotalTime(false)) return 1;
+		if (this.getTotalTime(false) < other.getTotalTime(false)) return -1;
+		return 0;
 	}
 
 	public String getFirstName() {
@@ -121,6 +136,45 @@ public class Employee {
 	public String getSubteam() {
 		return this.subteam.toString();
 	}
+	
+	public double getTotalTime(boolean includesForgotDays) {
+		double min = 0;
+		
+		for (int i = 0; i < this.timesIn.size(); i++) {
+			LocalDateTime in = this.timesIn.get(i);
+			LocalDateTime out;
+			if (timesOut.size() > i)
+				out = this.timesOut.get(i);
+			else
+				out = LocalDateTime.now();
+			
+			if (!includesForgotDays && this.forgotToSignOutOn(out)) continue;
+			
+			min += in.until(out, ChronoUnit.MINUTES);
+		}
+		
+		return min/60.0;
+	}
+	
+	public double getTotalTime(boolean includesForgotDays, LocalDateTime startDate, LocalDateTime endDate) {
+		double min = 0;
+		
+		for (int i = 0; i < this.timesIn.size(); i++) {
+			LocalDateTime in = this.timesIn.get(i);
+			LocalDateTime out;
+			if (timesOut.size() > i)
+				out = this.timesOut.get(i);
+			else
+				out = LocalDateTime.now();
+			
+			if (!includesForgotDays && this.forgotToSignOutOn(out)) continue;
+			if (in.isAfter(startDate) && out.isBefore(endDate)) {
+				min += in.until(out, ChronoUnit.MINUTES);
+			}
+		}
+		
+		return min/60.0;
+	}
 
 	public ArrayList<LocalDateTime> getSwipes() {
 		ArrayList<LocalDateTime> list = new ArrayList<LocalDateTime>();
@@ -130,5 +184,21 @@ public class Employee {
 		}
 		
 		return list;
+	}
+
+	public void logout(LocalDateTime t) {
+		if (this.isInBuilding()) {
+			this.registerSwipe(t);
+		} else {
+			System.out.println(firstname + " is already logged out.");
+		}
+	}
+	
+	public boolean forgotToSignOutOn(LocalDateTime datetime) {
+		return this.forgotToSignOutDates.contains(datetime);
+	}
+
+	public void forgotToSignOut(LocalDateTime datetime) {
+		forgotToSignOutDates.add(datetime);
 	}
 }

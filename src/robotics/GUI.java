@@ -19,16 +19,18 @@ import javax.swing.JOptionPane;
  *
  * @author David
  */
-public class GUI extends javax.swing.JFrame implements KeyListener, WindowListener {
+public class GUI extends javax.swing.JFrame implements KeyListener,
+		WindowListener {
 	private static final String path = "";
 	private static final String studentData = "StudentData.csv";
 	private static final String attendanceData = "AttendanceData.csv";
+	private static final int CURRENT_SEASON = 2015;
 
 	private EmployeeRecords records;
 
 	public GUI() {
 		initComponents();
-		
+
 		JOptionPane.showMessageDialog(null, "Type help for commands");
 
 		records = new EmployeeRecords();
@@ -36,7 +38,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 		records.loadEmployeeDataFromFile(path + studentData);
 		records.loadAttendanceDataFromFile(path + attendanceData);
 
-		roomDisplay.addKeyListener(this);
+		displayTextArea.addKeyListener(this);
 		this.addWindowListener(this);
 	}
 
@@ -60,7 +62,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 
 		jPanel1 = new javax.swing.JPanel();
 		jScrollPane1 = new javax.swing.JScrollPane();
-		roomDisplay = new javax.swing.JTextArea();
+		displayTextArea = new javax.swing.JTextArea();
 		jScrollPane2 = new javax.swing.JScrollPane();
 		output = new javax.swing.JTextArea();
 		jTextField1 = new javax.swing.JTextField();
@@ -73,15 +75,17 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 			}
 		});
 
-		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Firebots Attendance Tracker - Type 'help' to see commands"));
+		jPanel1
+				.setBorder(javax.swing.BorderFactory
+						.createTitledBorder("Firebots Attendance Tracker - Type 'help' to see commands"));
 
 		jScrollPane1.setEnabled(false);
 
-		roomDisplay.setEditable(false);
-		roomDisplay.setColumns(20);
-		roomDisplay.setFont(new java.awt.Font("Consolas", 0, 10)); // NOI18N
-		roomDisplay.setRows(5);
-		jScrollPane1.setViewportView(roomDisplay);
+		displayTextArea.setEditable(false);
+		displayTextArea.setColumns(20);
+		displayTextArea.setFont(new java.awt.Font("Consolas", 0, 10)); // NOI18N
+		displayTextArea.setRows(5);
+		jScrollPane1.setViewportView(displayTextArea);
 
 		output.setColumns(20);
 		output.setLineWrap(true);
@@ -104,46 +108,82 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 		javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
 		jPanel1.setLayout(jPanel1Layout);
 		jPanel1Layout
-				.setHorizontalGroup(
-						jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-								.addGroup(jPanel1Layout.createSequentialGroup().addContainerGap()
-										.addGroup(jPanel1Layout
-												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-												.addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel1)
-														.addPreferredGap(
-																javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-												.addComponent(jTextField1))
-						.addGroup(jPanel1Layout.createSequentialGroup()
-								.addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 477,
-										javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(
-										jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)))
-						.addContainerGap()));
-		jPanel1Layout
-				.setVerticalGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(jPanel1Layout.createSequentialGroup().addContainerGap()
-								.addGroup(jPanel1Layout
-										.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-										.addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 319,
-												Short.MAX_VALUE)
-										.addComponent(jScrollPane1))
-						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-						.addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-								.addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE,
-										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-								.addComponent(jLabel1))
-						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+				.setHorizontalGroup(jPanel1Layout
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(
+								jPanel1Layout
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												jPanel1Layout
+														.createParallelGroup(
+																javax.swing.GroupLayout.Alignment.LEADING)
+														.addGroup(
+																jPanel1Layout
+																		.createSequentialGroup()
+																		.addComponent(jLabel1)
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+																		.addComponent(jTextField1))
+														.addGroup(
+																jPanel1Layout
+																		.createSequentialGroup()
+																		.addComponent(jScrollPane1,
+																				javax.swing.GroupLayout.PREFERRED_SIZE,
+																				477,
+																				javax.swing.GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+																		.addComponent(jScrollPane2,
+																				javax.swing.GroupLayout.DEFAULT_SIZE,
+																				332, Short.MAX_VALUE)))
+										.addContainerGap()));
+		jPanel1Layout.setVerticalGroup(jPanel1Layout.createParallelGroup(
+				javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(
+						jPanel1Layout
+								.createSequentialGroup()
+								.addContainerGap()
+								.addGroup(
+										jPanel1Layout
+												.createParallelGroup(
+														javax.swing.GroupLayout.Alignment.LEADING, false)
+												.addComponent(jScrollPane2,
+														javax.swing.GroupLayout.DEFAULT_SIZE, 319,
+														Short.MAX_VALUE).addComponent(jScrollPane1))
+								.addPreferredGap(
+										javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+								.addGroup(
+										jPanel1Layout
+												.createParallelGroup(
+														javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(jTextField1,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addComponent(jLabel1))
+								.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE)));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+				getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jPanel1,
-						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addContainerGap()));
-		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-				.addGroup(layout.createSequentialGroup().addContainerGap().addComponent(jPanel1,
-						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addContainerGap()));
+		layout.setHorizontalGroup(layout.createParallelGroup(
+				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+				layout
+						.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addContainerGap()));
+		layout.setVerticalGroup(layout.createParallelGroup(
+				javax.swing.GroupLayout.Alignment.LEADING).addGroup(
+				layout
+						.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE,
+								javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addContainerGap()));
 
 		pack();
 	}// </editor-fold>
@@ -169,7 +209,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 	}
 
 	private void handleCommand(String command) {
-		roomDisplay.append("\n");
+		displayTextArea.append("\n");
 		String[] words = command.split(" ");
 
 		if (words.length == 0)
@@ -177,51 +217,52 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 
 		String first = words[0];
 		String second = (words.length >= 2) ? words[1] : null;
-		String rest = (words.length >= 2) ? command.substring(command.indexOf(" ") + 1).trim() : "";
 		String third = (words.length >= 3) ? words[2] : null;
+		String rest = (words.length >= 2) ? command.substring(
+				command.indexOf(" ") + 1).trim() : "";
 
 		if (first.equals("help")) {
 			displayHelpMessage();
-		} else
-		// ***** Register Swipe *****
-		if (records.isId(first)) {
+		} else if (records.isId(first)) { // ***** Register Swipe *****
 			String id = first;
 			records.registerSwipe(id, LocalDateTime.now());
 			Employee e = records.getEmployeeById(id);
 			if (e != null) {
-				roomDisplay.append("Registered swipe for " + e.getFirstName() + ". Student is "
+				displayTextArea.append("Registered swipe for " + e.getFirstName()
+						+ ". Student is "
 						+ ((e.isInBuilding()) ? "signed IN" : "signed OUT"));
 
 				records.writeAttendanceDataToFile(path + attendanceData);
 			}
-
 			// ***** Lookup by Name ****
 		} else if (records.isName(first)) {
 			List<Employee> list = records.getEmployeesByName(first);
 			for (Employee e : list) {
-				roomDisplay.append(e.displayInfo() + "\n");
-				roomDisplay.append(e.getReportFor() + "\n");
+				displayTextArea.append(e.displayInfo() + "\n");
+				displayTextArea.append(e.getReportFor() + "\n");
 			}
 
-			// **** List Students ****
+			// **** List Missing Students ****
 		} else if (first.equals("missing")) {
-			if (second == null) return;
-			
+			if (second == null)
+				return;
+
 			List<Employee> list = records.getCurrentlyAbsentEmployeesFor(second);
 			for (Employee e : list)
-				roomDisplay.append(e.displayInfo() + "\n");
-			
-			roomDisplay.append("Total: " + list.size());
-			
-		} else if (first.equals("logout")) {
+				displayTextArea.append(e.displayInfo() + "\n");
+
+			displayTextArea.append("Total: " + list.size());
+
+		} else if (first.equals("logout")) { // **** Logout a student Student ****
 			Employee e = records.getEmployeeById(second);
 			if (e != null) {
 				if (third != null) {
 					try {
 						double amt = Double.parseDouble(third);
-						int hours = (int)amt;
-						int minutes = (int)(amt-hours*60);
-						LocalDateTime t = LocalDateTime.now().minusHours(hours).minusMinutes(minutes);
+						int hours = (int) amt;
+						int minutes = (int) (amt - hours * 60);
+						LocalDateTime t = LocalDateTime.now().minusHours(hours)
+								.minusMinutes(minutes);
 						e.logout(t);
 
 						records.writeAttendanceDataToFile(path + attendanceData);
@@ -232,29 +273,32 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 			}
 
 		} else if (first.equals("report")) {
-			 ArrayList<Employee> list = records.getAllEmployees();
-			 Collections.sort(list);
-			 Collections.reverse(list);
-			 
-			 for (Employee e:list) {
-				 roomDisplay.append(e.getFirstName() + " " + e.getLastName() + "\n");
-				 roomDisplay.append(e.getReportFor());
-			 }
-			 
-			 records.writeAttendanceReportToFile("..\\attendanceReport.csv");
+			ArrayList<Employee> list = records.getAllEmployees();
+			Collections.sort(list);
+			Collections.reverse(list);
+
+			for (Employee e : list) {
+				displayTextArea.append(e.getFirstName() + " " + e.getLastName() + "\n");
+				displayTextArea.append(e.getReportFor());
+			}
+
+			records.writeAttendanceReportToFile("..\\attendanceReport.csv");
 		} else if (first.equals("list")) {
-			roomDisplay
-					.append((second == null) ? records.getAllStudentsString() : records.getStudentsString(rest) + "\n");
+			displayTextArea.append((second == null) ? records.getAllStudentsString()
+					: records.getStudentsString(rest) + "\n");
 
 			// **** List who is present ****
 		} else if (first.equals("who")) {
-			List<Employee> lst = records.getEmployeesInBuildingAt(LocalDateTime.now());
+			List<Employee> lst = records
+					.getEmployeesInBuildingAt(LocalDateTime.now());
 
 			if (second == null) {
-				roomDisplay.append("Students preset at " + LocalDateTime.now() + ": " + lst.size() + "\n");
+				displayTextArea.append("Students preset at " + LocalDateTime.now()
+						+ ": " + lst.size() + "\n");
 
 				for (Employee e : lst) {
-					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName() + "\n");
+					this.displayTextArea.append(e.getFirstName() + " " + e.getLastName()
+							+ "\n");
 				}
 			} else {
 				List<Employee> lst2 = new ArrayList<Employee>();
@@ -263,35 +307,66 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 						lst2.add(e);
 				}
 
-				roomDisplay.append("members of " + second.toUpperCase() + " preset at " + LocalDateTime.now() + ": "
-						+ lst2.size() + "\n");
+				displayTextArea.append("members of " + second.toUpperCase()
+						+ " preset at " + LocalDateTime.now() + ": " + lst2.size() + "\n");
 
 				for (Employee e : lst2) {
-					this.roomDisplay.append(e.getFirstName() + " " + e.getLastName() + "\n");
+					this.displayTextArea.append(e.getFirstName() + " " + e.getLastName()
+							+ "\n");
 				}
 			}
-			this.roomDisplay.append("***\n");
+			this.displayTextArea.append("***\n");
+		} else if (first.equals("register")) {
+			if (second == null) {
+				displayTextArea.append("To use the command: register <id-number>");
+				return;
+			}
+
+			if (records.isId(second)) {
+				displayTextArea.append("This id is already registered.");
+				return;
+			}
+
+			String fn = JOptionPane.showInputDialog("Type your first name");
+			String ln = JOptionPane.showInputDialog("Type your last name");
+			String team = JOptionPane.showInputDialog("What subteam are you on?");
+			Employee e = new Employee(second, fn, ln, Employee.getSubteamFor(team),
+					CURRENT_SEASON);
+			records.addEmployee(e);
+			records.writeEmployeeDataToFile(path + studentData);
+			displayTextArea.append("You have been registered.");
+
+			records.registerSwipe(e.getId(), LocalDateTime.now());
+			displayTextArea
+					.append("Registered swipe for " + e.getFirstName() + ". Student is "
+							+ ((e.isInBuilding()) ? "signed IN" : "signed OUT"));
+
+			records.writeAttendanceDataToFile(path + attendanceData);
 		}
 	}
 
 	private void displayHelpMessage() {
-		roomDisplay.append("Commands:\n");
-		roomDisplay.append("help\t\t- Get this list\n\n");
+		displayTextArea.append("Commands:\n");
+		displayTextArea.append("help\t\t- Get this list\n\n");
 
-		roomDisplay.append("who\t\t- List who is present\n");
-		roomDisplay.append("who [subteam]\t\t- List who is present in a subteam.\n\n");
+		displayTextArea.append("who\t\t- List who is present\n");
+		displayTextArea
+				.append("who [subteam]\t\t- List who is present in a subteam.\n\n");
 
-		roomDisplay.append("[id #]\t\t- Scans person in or out\n");
-		roomDisplay.append("[first name]\t\t- List whether person is present\n");
-		roomDisplay.append("[last name]\t\t- List whether person is present\n");
-		roomDisplay.append("list\t\t- List all people (regardless of whether present)\n");
-		roomDisplay.append("list [subteam name]\t\t- List all people in subteam.\n");
+		displayTextArea.append("[id #]\t\t- Scans person in or out\n");
+		displayTextArea
+				.append("[first name]\t\t- List whether person is present\n");
+		displayTextArea.append("[last name]\t\t- List whether person is present\n");
+		displayTextArea
+				.append("list\t\t- List all people (regardless of whether present)\n");
+		displayTextArea
+				.append("list [subteam name]\t\t- List all people in subteam.\n");
 
 	}
 
 	/**
 	 * @param args
-	 *            the command line arguments
+	 *          the command line arguments
 	 */
 	public static void main(String args[]) {
 		/* Set the Nimbus look and feel */
@@ -300,24 +375,28 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 		/*
 		 * If Nimbus (introduced in Java SE 6) is not available, stay with the
 		 * default look and feel. For details see
-		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.
-		 * html
+		 * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf. html
 		 */
 		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager
+					.getInstalledLookAndFeels()) {
 				if ("Nimbus".equals(info.getName())) {
 					javax.swing.UIManager.setLookAndFeel(info.getClassName());
 					break;
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
+					java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
+					java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
+					java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(
+					java.util.logging.Level.SEVERE, null, ex);
 		}
 		// </editor-fold>
 
@@ -336,7 +415,7 @@ public class GUI extends javax.swing.JFrame implements KeyListener, WindowListen
 	private javax.swing.JScrollPane jScrollPane2;
 	private javax.swing.JTextField jTextField1;
 	private javax.swing.JTextArea output;
-	private javax.swing.JTextArea roomDisplay;
+	private javax.swing.JTextArea displayTextArea;
 
 	// End of variables declaration
 

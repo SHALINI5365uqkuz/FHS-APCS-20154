@@ -68,57 +68,7 @@ public class EmployeeRecords {
 		else
 			System.out.println("Error: No record for id: " + id);
 	}
-
-	/***
-	 * return the total time spent inside the building for employee id
-	 * 
-	 * @param id
-	 *            the id of the employee you want to get the time for
-	 * @return int the total seconds spent inside the building so far for
-	 *         employee id
-	 */
-	public int getTimeInBuildingFor(String id) {
-		return getEmployeeById(id).getTimeInBuilding();
-	}
-
-	/***
-	 * return the employee with the most time in the building so far
-	 * 
-	 * @return Employee the employee with the most time in the building so far
-	 */
-	public Employee getEmployeeWithMostTimeIn() {
-		int maxtime = 0;
-		Employee best = null;
-
-		for (Employee e : employees) {
-			if (e.getTimeInBuilding() > maxtime) {
-				maxtime = e.getTimeInBuilding();
-				best = e;
-			}
-		}
-
-		return best;
-	}
-
-	/***
-	 * return the employee with the least time in the building so far
-	 * 
-	 * @return Employee the employee with the least time in the building so far
-	 */
-	public Employee getEmployeeWithLeastTimeIn() {
-		int mintime = Integer.MAX_VALUE;
-		Employee worst = null;
-
-		for (Employee e : employees) {
-			if (e.getTimeInBuilding() < mintime) {
-				mintime = e.getTimeInBuilding();
-				worst = e;
-			}
-		}
-
-		return worst;
-	}
-
+	
 	/***
 	 * return a list of employees in the building at a particular time
 	 * 

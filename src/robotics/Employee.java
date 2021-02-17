@@ -15,18 +15,8 @@ public class Employee implements Comparable<Employee> {
 	private String firstname, lastname;
 	private String id; // unique employee id
 	private int firstYear;
-	private int totalTime;
 	private ArrayList<LocalDateTime> timesIn, timesOut, forgotToSignOutDates;
 	private boolean inBuilding;
-
-	// public Employee(int id) {
-	// this.id = id;
-	//
-	// totalTime = 0;
-	// timesIn = new ArrayList<LocalDateTime>();
-	// timesOut = new ArrayList<LocalDateTime>();
-	// inBuilding = false;
-	// }
 
 	public Employee(String id, String fn, String ln, Subteam subteam, int firstyear) {
 		this.id = id;
@@ -35,7 +25,6 @@ public class Employee implements Comparable<Employee> {
 		this.subteam = subteam;
 		this.firstYear = firstyear;
 
-		totalTime = 0;
 		timesIn = new ArrayList<LocalDateTime>();
 		timesOut = new ArrayList<LocalDateTime>();
 		forgotToSignOutDates = new ArrayList<LocalDateTime>();
@@ -44,9 +33,6 @@ public class Employee implements Comparable<Employee> {
 
 	public void registerSwipe(LocalDateTime time) {
 		if (inBuilding) {
-			LocalDateTime last_swipe = timesIn.get(timesIn.size() - 1); // get last
-			totalTime += last_swipe.until(time, ChronoUnit.SECONDS); // update total
-																																// time
 			timesOut.add(time);
 			inBuilding = false;
 		} else {
@@ -75,10 +61,6 @@ public class Employee implements Comparable<Employee> {
 
 	public String getId() {
 		return id;
-	}
-
-	public int getTimeInBuilding() {
-		return totalTime;
 	}
 
 	public static Subteam getSubteamFor(String n) {

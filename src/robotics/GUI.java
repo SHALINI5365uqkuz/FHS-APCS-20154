@@ -316,6 +316,8 @@ public class GUI extends javax.swing.JFrame implements KeyListener,
 				}
 			}
 			this.displayTextArea.append("***\n");
+		} else if (first.equals("exitnosave")) {
+			System.exit(0);
 		} else if (first.equals("register")) {
 			if (second == null) {
 				displayTextArea.append("To use the command: register <id-number>");
